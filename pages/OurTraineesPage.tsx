@@ -1,0 +1,136 @@
+import React from 'react';
+import { 
+    UserGroupIcon, RefreshIcon, EditIcon, FilterListIcon,
+    SearchUserIcon, DebtorsIcon, ViewIcon, SavePdfIcon, PrintIcon, 
+    OpenFolderIcon, WarningIcon 
+} from '../components/icons';
+
+const InfoBox: React.FC<{ label: string; value: string; className?: string }> = ({ label, value, className = '' }) => (
+  <div className={className}>
+    <p className="text-xs text-gray-500 dark:text-gray-400">{label}</p>
+    <p className="font-semibold text-gray-800 dark:text-gray-200">{value}</p>
+  </div>
+);
+
+const LargeActionButton: React.FC<{icon: React.ReactNode, title: string, description: string}> = ({ icon, title, description }) => (
+    <div className="bg-custom-teal-light p-4 rounded-lg flex items-center space-x-4 h-full">
+        <div>{icon}</div>
+        <div>
+            <h4 className="font-bold text-custom-teal-darker">{title}</h4>
+            <p className="text-sm text-gray-700">{description}</p>
+        </div>
+    </div>
+);
+
+const ActionButton: React.FC<{icon: React.ReactNode, label: string}> = ({icon, label}) => (
+    <button className="flex items-center justify-center w-full space-x-2 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 font-semibold py-2 px-4 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+        {icon}
+        <span>{label}</span>
+    </button>
+);
+
+const OurTraineesPage: React.FC = () => {
+    const trainees = [
+        { id: '131', name: 'Adilson Jorge Fernandes da Silva', dob: '13-03-1998', bi: '005427418LA049', paid: 'AOA 0,00', total: 'AOA 20 000,00'},
+        { id: '128', name: 'Suraia Cassungo Soares', dob: '27-06-2005', bi: '008097426LA051', paid: 'AOA 1 000,00', total: 'AOA 1 000,00'},
+    ];
+
+    return (
+        <div className="flex flex-col h-full">
+            <header className="flex justify-between items-center pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+                <h1 className="text-2xl font-bold text-gray-500 dark:text-gray-400 tracking-widest uppercase">Nossos Formandos</h1>
+            </header>
+
+            <div className="mt-6 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg flex-1 flex flex-col">
+                <div className="bg-custom-teal text-white p-8 rounded-t-2xl -m-6 mb-0 flex justify-between items-center">
+                    <div>
+                        <h2 className="text-4xl font-serif">Gerencie seus alunos</h2>
+                        <p className="mt-2 text-lg opacity-90">Faça a gestão de seus formandos, analise os dados pessoais e os pagamentos de cada um deles.</p>
+                    </div>
+                    <div className="hidden md:block">
+                        <UserGroupIcon />
+                    </div>
+                </div>
+
+                <div className="bg-custom-teal-light text-custom-teal-darker p-3 rounded-md flex justify-between items-center my-6">
+                    <p className="font-semibold">🧐 Encontramos 9 formandos inscritos nessa turma!</p>
+                    <div className="flex items-center space-x-2">
+                        <button className="p-2 bg-white dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600"><RefreshIcon className="h-4 w-4 text-gray-600 dark:text-gray-300 mr-0" /></button>
+                        <button className="p-2 bg-custom-teal rounded-full hover:bg-custom-teal-dark"><EditIcon className="h-4 w-4 text-white" /></button>
+                        <button className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-700 rounded-full border border-gray-300 dark:border-gray-600">
+                            <FilterListIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                            <span className="font-semibold text-gray-700 dark:text-gray-200">Filtrar lista</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-6 mb-6">
+                    <InfoBox label="Código da Turma" value="1" />
+                    <InfoBox label="Nome de Turma" value="INF710/11-1/19" />
+                    <InfoBox label="Nome do Curso" value="LÍNGUA PORTUGUESA & ORATÓRIA" className="col-span-2 md:col-span-3 lg:col-span-1" />
+                    <InfoBox label="Curso Abrev." value="Por&Ora" />
+                    <InfoBox label="Formador" value="Sem Formador" />
+                    <InfoBox label="Turno" value="Manhã" />
+                    <InfoBox label="Sala" value="7" />
+                    <InfoBox label="Horário" value="10h/11h" />
+                    <InfoBox label="Início do Curso" value="01-12-2019" />
+                    <InfoBox label="Fim do Curso" value="01-02-2020" />
+                    <InfoBox label="Duração da Turma" value="2 mês(es)" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <LargeActionButton icon={<SearchUserIcon/>} title="Análise individual" description="Análise detalhada de cada formando..." />
+                        <LargeActionButton icon={<DebtorsIcon/>} title="Ver Devedores" description="Lista dos formandos com dívidas..." />
+                    </div>
+                    <div className="bg-white dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600 grid grid-cols-2 gap-4 content-center">
+                        <ActionButton icon={<ViewIcon/>} label="Visualizar" />
+                        <ActionButton icon={<SavePdfIcon/>} label="Salvar PDF" />
+                        <ActionButton icon={<PrintIcon/>} label="Imprimir" />
+                        <ActionButton icon={<OpenFolderIcon/>} label="Abrir Pasta" />
+                    </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left text-gray-600 dark:text-gray-300 border-t dark:border-gray-700">
+                        <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700 whitespace-nowrap">
+                            <tr>
+                                <th scope="col" className="px-6 py-3 border-r dark:border-gray-600">Código</th>
+                                <th scope="col" className="px-6 py-3 border-r dark:border-gray-600">Nome do Formando</th>
+                                <th scope="col" className="px-6 py-3 border-r dark:border-gray-600">Nascimento</th>
+                                <th scope="col" className="px-6 py-3 border-r dark:border-gray-600">B.I.</th>
+                                <th scope="col" className="px-6 py-3 border-r dark:border-gray-600">Valor Pago</th>
+                                <th scope="col" className="px-6 py-3">Custo Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {trainees.map((row) => (
+                                <tr key={row.id} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td className="px-6 py-4 font-medium text-blue-600 dark:text-blue-400 underline border-r dark:border-gray-600">{row.id}</td>
+                                    <td className="px-6 py-4 border-r dark:border-gray-600">{row.name}</td>
+                                    <td className="px-6 py-4 border-r dark:border-gray-600">{row.dob}</td>
+                                    <td className="px-6 py-4 border-r dark:border-gray-600">{row.bi}</td>
+                                    <td className="px-6 py-4 border-r dark:border-gray-600">{row.paid}</td>
+                                    <td className="px-6 py-4">{row.total}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div className="mt-auto pt-6 space-y-2">
+                    <div className="flex items-center space-x-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/30 text-yellow-800 dark:text-yellow-300 text-sm p-3 rounded-md">
+                        <WarningIcon />
+                        <span>Esta versão do Excel não suporta a execução ou interação com Controlos de Formulário.</span>
+                    </div>
+                     <div className="flex items-center space-x-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/30 text-yellow-800 dark:text-yellow-300 text-sm p-3 rounded-md">
+                        <WarningIcon />
+                        <span>Esta versão do Excel não suporta a execução ou interação com Controlos de Formulário.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default OurTraineesPage;
