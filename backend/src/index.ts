@@ -26,6 +26,61 @@ const trainees = [
     { id: '115', name: 'Maria Joaquina de Amaral', dob: '05-08-2001', bi: '009876543LA098', paid: 'AOA 18 000,00', total: 'AOA 20 000,00'},
 ];
 
+// Dados de exemplo para Cursos (simulando uma base de dados)
+const courses = [
+  { 
+    code: 'EXL-AV', 
+    name: 'Excel Avançado',
+    abbr: 'Excel Av.',
+    registrationFee: '2.500,00 AOA',
+    monthlyFee: '15.000,00 AOA',
+    durationDays: 30,
+    totalCost: '17.500,00 AOA',
+    enrolled: 25
+  },
+  { 
+    code: 'MKT-DG', 
+    name: 'Marketing Digital',
+    abbr: 'Mkt Digital',
+    registrationFee: '5.000,00 AOA',
+    monthlyFee: '20.000,00 AOA',
+    durationDays: 45,
+    totalCost: '25.000,00 AOA',
+    enrolled: 18
+  },
+  { 
+    code: 'GEST-PROJ', 
+    name: 'Gestão de Projectos com Ms Project',
+    abbr: 'Gest. Proj.',
+    registrationFee: '5.000,00 AOA',
+    monthlyFee: '25.000,00 AOA',
+    durationDays: 60,
+    totalCost: '30.000,00 AOA',
+    enrolled: 22
+  },
+  { 
+    code: 'ING-TEC', 
+    name: 'Inglês Técnico',
+    abbr: 'Ing. Técnico',
+    registrationFee: '2.500,00 AOA',
+    monthlyFee: '18.000,00 AOA',
+    durationDays: 90,
+    totalCost: '20.500,00 AOA',
+    enrolled: 0
+  },
+  {
+    code: 'PORT-ORA',
+    name: 'Língua Portuguesa & Oratória',
+    abbr: 'Por&Ora',
+    registrationFee: '2.500,00 AOA',
+    monthlyFee: '10.000,00 AOA',
+    durationDays: 60,
+    totalCost: '12.500,00 AOA',
+    enrolled: 30
+  }
+];
+
+
 // Rota principal da API
 app.get('/', (req: Request, res: Response) => {
   res.send('Bem-vindo à API do Clique SG! O servidor está a funcionar.');
@@ -35,6 +90,11 @@ app.get('/', (req: Request, res: Response) => {
 app.get('/api/trainees', (req: Request, res: Response) => {
   // Em uma aplicação real, aqui você buscaria os dados de uma base de dados.
   res.json(trainees);
+});
+
+// Rota para buscar todos os cursos
+app.get('/api/courses', (req: Request, res: Response) => {
+  res.json(courses);
 });
 
 // Inicia o servidor

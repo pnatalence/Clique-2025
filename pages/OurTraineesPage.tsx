@@ -169,7 +169,7 @@ const OurTraineesPage: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto flex-1">
                     <table className="w-full text-sm text-left text-gray-600 dark:text-gray-300 border-t dark:border-gray-700">
                         <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700 whitespace-nowrap">
                             <tr>
@@ -185,17 +185,6 @@ const OurTraineesPage: React.FC = () => {
                             {renderTableContent()}
                         </tbody>
                     </table>
-                </div>
-                
-                <div className="mt-auto pt-6 space-y-2">
-                    <div className="flex items-center space-x-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/30 text-yellow-800 dark:text-yellow-300 text-sm p-3 rounded-md">
-                        <WarningIcon />
-                        <span>Esta versão do Excel não suporta a execução ou interação com Controlos de Formulário.</span>
-                    </div>
-                     <div className="flex items-center space-x-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/30 text-yellow-800 dark:text-yellow-300 text-sm p-3 rounded-md">
-                        <WarningIcon />
-                        <span>Esta versão do Excel não suporta a execução ou interação com Controlos de Formulário.</span>
-                    </div>
                 </div>
             </div>
         </div>
