@@ -1,25 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import Sidebar from './components/Sidebar';
-import Dashboard from './components/Dashboard';
 import InfoSidebar from './components/InfoSidebar';
-import CoursesPage from './pages/CoursesPage';
-import ClassesPage from './pages/ClassesPage';
-import AddPage from './pages/AddPage';
-import DocumentsPage from './pages/DocumentsPage';
-import PaymentsPage from './pages/PaymentsPage';
 import CoursesSidebar from './components/CoursesSidebar';
-import RegistrationFormPage from './pages/RegistrationFormPage';
-import TraineeProfilePage from './pages/TraineeProfilePage';
-import OurTraineesPage from './pages/OurTraineesPage';
-import AssetControlPage from './pages/AssetControlPage';
-import IndividualAnalysisPage from './pages/IndividualAnalysisPage';
-import ProgressPage from './pages/ProgressPage';
-import InformationPage from './pages/InformationPage';
-import AboutPage from './pages/AboutPage';
 import SettingsModal from './components/SettingsModal';
 import LoginPage from './pages/LoginPage';
 import ChatSystem from './components/ChatSystem';
 import { MenuIcon, BellIcon } from './components/icons';
+
+// Lazy load page components for code-splitting
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const CoursesPage = lazy(() => import('./pages/CoursesPage'));
+const ClassesPage = lazy(() => import('./pages/ClassesPage'));
+const AddPage = lazy(() => import('./pages/AddPage'));
+const DocumentsPage = lazy(() => import('./pages/DocumentsPage'));
+const PaymentsPage = lazy(() => import('./pages/PaymentsPage'));
+const RegistrationFormPage = lazy(() => import('./pages/RegistrationFormPage'));
+const TraineeProfilePage = lazy(() => import('./pages/TraineeProfilePage'));
+const OurTraineesPage = lazy(() => import('./pages/OurTraineesPage'));
+const AssetControlPage = lazy(() => import('./pages/AssetControlPage'));
+const IndividualAnalysisPage = lazy(() => import('./pages/IndividualAnalysisPage'));
+const ProgressPage = lazy(() => import('./pages/ProgressPage'));
+const InformationPage = lazy(() => import('./pages/InformationPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+
+const LoadingSpinner: React.FC = () => (
+  <div className="flex h-full w-full items-center justify-center">
+    <div className="h-16 w-16 animate-spin rounded-full border-b-2 border-t-2 border-custom-teal"></div>
+  </div>
+);
+
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -125,7 +134,9 @@ const App: React.FC = () => {
       )}
       {renderSidebar()}
       <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
-        {renderPage()}
+        <Suspense fallback={<LoadingSpinner />}>
+          {renderPage()}
+        </Suspense>
       </main>
       <InfoSidebar isInfoSidebarOpen={isInfoSidebarOpen} setIsInfoSidebarOpen={setIsInfoSidebarOpen} />
       
