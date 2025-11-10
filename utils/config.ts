@@ -9,7 +9,7 @@
 const IS_PRODUCTION = true;
 
 // ATENÇÃO: Substitua esta URL pela URL do seu serviço backend no Render.
-const PRODUCTION_API_URL = 'https://cliquesg-2025.onrender.com';
+const PRODUCTION_API_URL = 'https://cliquesg-backend.onrender.com';
 const DEVELOPMENT_API_URL = 'http://localhost:3001';
 
 export const API_BASE_URL = IS_PRODUCTION 
