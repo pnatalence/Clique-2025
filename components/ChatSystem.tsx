@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, FunctionDeclaration, Type } from "@google/genai";
 import ChatWindow, { Conversation, Message } from './ChatWindow';
 import { AddCircleIcon, ChatIcon, CloseIcon, MaximizeIcon } from './icons';
 
 interface ChatSystemProps {
   isOpen: boolean;
   onClose: () => void;
+  setIsDarkMode: (isDark: boolean) => void;
 }
 
-const ChatSystem: React.FC<ChatSystemProps> = ({ isOpen, onClose }) => {
+const toggleDarkModeFunction: FunctionDeclaration = {
+  name: 'toggleDarkMode',
+  description: 'Ativa ou desativa o modo escuro para a aplicação.',
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      enabled: {
+        type: Type.BOOLEAN,
+        description: 'Defina como verdadeiro para ativar o modo escuro, falso para desativá-lo.',
+      },
+    },
+    required: ['enabled'],
+  },
+};
+
+const ChatSystem: React.FC<ChatSystemProps> = ({ isOpen, onClose, setIsDarkMode }) => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeWindows, setActiveWindows] = useState<{ [key: string]: { minimized: boolean } }>({});
   const [isContactListOpen, setIsContactListOpen] = useState(true);
@@ -82,9 +98,19 @@ const ChatSystem: React.FC<ChatSystemProps> = ({ isOpen, onClose }) => {
           model: 'gemini-2.5-flash',
           contents: text,
           config: {
-            systemInstruction: 'Você é a Clique IA, uma assistente prestativa para o sistema de gestão Clique SG. Você responde a perguntas dos usuários sobre como usar o aplicativo. Mantenha suas respostas concisas e amigáveis.',
+            systemInstruction: 'Você é a Clique IA, uma assistente prestativa para o sistema de gestão Clique SG. Você responde a perguntas dos usuários sobre como usar o aplicativo e também pode executar tarefas, como ativar ou desativar o modo escuro. Mantenha suas respostas concisas e amigáveis.',
+            tools: [{ functionDeclarations: [toggleDarkModeFunction] }],
           },
         });
+        
+        const functionCalls = response.functionCalls;
+        if (functionCalls) {
+          for (const call of functionCalls) {
+            if (call.name === 'toggleDarkMode' && typeof call.args.enabled === 'boolean') {
+              setIsDarkMode(call.args.enabled);
+            }
+          }
+        }
         
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),

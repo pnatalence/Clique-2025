@@ -33,11 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setCurrentPage, isMobileMenuOpen, set
       <div className="flex items-center p-4">
         <div className="flex-1 flex flex-col items-center">
             <div className="bg-white p-2 rounded-lg shadow-lg">
-              <svg className="h-16 w-16 text-custom-teal-darker" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M13.5 13.5v-6h-3v6h-6v3h6v6h3v-6h6v-3h-6z" />
-                <path d="M9 4.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 15a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm10.5-15a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" opacity=".3"/>
-                 <path d="M17 10h-2V7h2v3zm-4 0H9V7h4v3zm-4 0H5V7h4v3z" fill="#FFF"/>
-              </svg>
+              <img src="https://i.postimg.cc/fyjwfpTw/Screenshot-20251110-204145-Excel.jpg" alt="Clique Logo" className="h-16 w-16 object-contain" />
             </div>
             <h1 className="text-xl font-bold mt-2 text-black">Clique</h1>
         </div>

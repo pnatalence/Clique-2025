@@ -32,7 +32,7 @@ const SectionHeader: React.FC<{icon: React.ReactNode, title: string}> = ({icon, 
 const RegistrationFormPage: React.FC = () => {
   return (
     <div className="flex flex-col h-full">
-        <header className="flex justify-between items-center pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+        <header className="flex justify-center items-center pb-4 border-b-2 border-gray-200 dark:border-gray-700">
             <h1 className="text-2xl font-bold text-gray-500 dark:text-gray-400 tracking-widest">FICHA DE INSCRIÇÃO</h1>
         </header>
 

@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     UserGroupIcon, RefreshIcon, EditIcon, FilterListIcon,
     SearchUserIcon, DebtorsIcon, ViewIcon, SavePdfIcon, PrintIcon, 
     OpenFolderIcon, WarningIcon 
 } from '../components/icons';
+import { API_BASE_URL } from '../utils/config';
+
+// Interface para definir o tipo de dado de um formando
+interface Trainee {
+    id: string;
+    name: string;
+    dob: string; // date of birth
+    bi: string;
+    paid: string;
+    total: string;
+}
 
 const InfoBox: React.FC<{ label: string; value: string; className?: string }> = ({ label, value, className = '' }) => (
   <div className={className}>
@@ -30,14 +41,81 @@ const ActionButton: React.FC<{icon: React.ReactNode, label: string}> = ({icon, l
 );
 
 const OurTraineesPage: React.FC = () => {
-    const trainees = [
-        { id: '131', name: 'Adilson Jorge Fernandes da Silva', dob: '13-03-1998', bi: '005427418LA049', paid: 'AOA 0,00', total: 'AOA 20 000,00'},
-        { id: '128', name: 'Suraia Cassungo Soares', dob: '27-06-2005', bi: '008097426LA051', paid: 'AOA 1 000,00', total: 'AOA 1 000,00'},
-    ];
+    const [trainees, setTrainees] = useState<Trainee[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchTrainees = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/trainees`);
+                if (!response.ok) {
+                    throw new Error('Não foi possível buscar os dados dos formandos.');
+                }
+                const data = await response.json();
+                setTrainees(data);
+            } catch (err) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError('Ocorreu um erro inesperado.');
+                }
+                // Em caso de erro, podemos manter os dados estáticos como fallback
+                setTrainees([
+                    { id: '131', name: 'Adilson Jorge Fernandes da Silva (Fallback)', dob: '13-03-1998', bi: '005427418LA049', paid: 'AOA 0,00', total: 'AOA 20 000,00'},
+                    { id: '128', name: 'Suraia Cassungo Soares (Fallback)', dob: '27-06-2005', bi: '008097426LA051', paid: 'AOA 1 000,00', total: 'AOA 1 000,00'},
+                ]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTrainees();
+    }, []);
+
+    const renderTableContent = () => {
+        if (loading) {
+            return (
+                <tr>
+                    <td colSpan={6} className="text-center p-6">Carregando dados...</td>
+                </tr>
+            );
+        }
+
+        if (error) {
+            return (
+                <tr>
+                    <td colSpan={6} className="text-center p-6 text-red-500">
+                        Erro ao carregar dados: {error}. Exibindo dados de fallback.
+                    </td>
+                </tr>
+            );
+        }
+        
+        if (trainees.length === 0) {
+            return (
+                <tr>
+                    <td colSpan={6} className="text-center p-6">Nenhum formando encontrado.</td>
+                </tr>
+            );
+        }
+
+        return trainees.map((row) => (
+            <tr key={row.id} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td className="px-6 py-4 font-medium text-blue-600 dark:text-blue-400 underline border-r dark:border-gray-600">{row.id}</td>
+                <td className="px-6 py-4 border-r dark:border-gray-600">{row.name}</td>
+                <td className="px-6 py-4 border-r dark:border-gray-600">{row.dob}</td>
+                <td className="px-6 py-4 border-r dark:border-gray-600">{row.bi}</td>
+                <td className="px-6 py-4 border-r dark:border-gray-600">{row.paid}</td>
+                <td className="px-6 py-4">{row.total}</td>
+            </tr>
+        ));
+    }
+
 
     return (
         <div className="flex flex-col h-full">
-            <header className="flex justify-between items-center pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+            <header className="flex justify-center items-center pb-4 border-b-2 border-gray-200 dark:border-gray-700">
                 <h1 className="text-2xl font-bold text-gray-500 dark:text-gray-400 tracking-widest uppercase">Nossos Formandos</h1>
             </header>
 
@@ -53,7 +131,7 @@ const OurTraineesPage: React.FC = () => {
                 </div>
 
                 <div className="bg-custom-teal-light text-custom-teal-darker p-3 rounded-md flex justify-between items-center my-6">
-                    <p className="font-semibold">🧐 Encontramos 9 formandos inscritos nessa turma!</p>
+                    <p className="font-semibold">🧐 Encontramos {trainees.length} formandos inscritos nessa turma!</p>
                     <div className="flex items-center space-x-2">
                         <button className="p-2 bg-white dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600"><RefreshIcon className="h-4 w-4 text-gray-600 dark:text-gray-300 mr-0" /></button>
                         <button className="p-2 bg-custom-teal rounded-full hover:bg-custom-teal-dark"><EditIcon className="h-4 w-4 text-white" /></button>
@@ -104,16 +182,7 @@ const OurTraineesPage: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {trainees.map((row) => (
-                                <tr key={row.id} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                    <td className="px-6 py-4 font-medium text-blue-600 dark:text-blue-400 underline border-r dark:border-gray-600">{row.id}</td>
-                                    <td className="px-6 py-4 border-r dark:border-gray-600">{row.name}</td>
-                                    <td className="px-6 py-4 border-r dark:border-gray-600">{row.dob}</td>
-                                    <td className="px-6 py-4 border-r dark:border-gray-600">{row.bi}</td>
-                                    <td className="px-6 py-4 border-r dark:border-gray-600">{row.paid}</td>
-                                    <td className="px-6 py-4">{row.total}</td>
-                                </tr>
-                            ))}
+                            {renderTableContent()}
                         </tbody>
                     </table>
                 </div>

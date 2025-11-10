@@ -25,7 +25,7 @@ interface AssetControlPageProps {
 const AssetControlPage: React.FC<AssetControlPageProps> = ({ setCurrentPage }) => {
   return (
     <div className="flex flex-col h-full">
-      <header className="flex justify-between items-center pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+      <header className="flex justify-center items-center pb-4 border-b-2 border-gray-200 dark:border-gray-700">
         <h1 className="text-2xl font-bold text-gray-500 dark:text-gray-400 tracking-widest uppercase">Controle de Bens</h1>
       </header>
       

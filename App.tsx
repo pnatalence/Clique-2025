@@ -154,7 +154,11 @@ const App: React.FC = () => {
         isDarkMode={isDarkMode}
         setIsDarkMode={setIsDarkMode}
       />
-      <ChatSystem isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      <ChatSystem 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)}
+        setIsDarkMode={setIsDarkMode} 
+      />
     </div>
   );
 };

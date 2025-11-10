@@ -1,5 +1,4 @@
 import React from 'react';
-import { AboutLogoHandIcon } from '../components/icons';
 
 const AboutPage: React.FC = () => {
     return (
@@ -12,8 +11,8 @@ const AboutPage: React.FC = () => {
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg w-full lg:w-1/2 flex flex-col text-center items-center">
                     <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">Clique SG 11</h2>
                     <p className="text-gray-600 dark:text-gray-300 mb-6">Comece a gerir com Clique!</p>
-                    <div className="border-2 border-gray-200 dark:border-gray-700 rounded-lg p-2 mb-6 inline-block">
-                        <AboutLogoHandIcon />
+                    <div className="bg-white p-2 rounded-lg shadow-lg mb-6">
+                        <img src="https://i.postimg.cc/fyjwfpTw/Screenshot-20251110-204145-Excel.jpg" alt="Clique Logo" className="h-32 w-32 object-contain" />
                     </div>
                     <div className="text-left space-y-4 text-gray-700 dark:text-gray-300 text-sm">
                         <p>
