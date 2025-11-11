@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { LockIcon, ChatIcon, CogIcon, QuestionIcon, InfoIcon, CloseIcon } from './icons';
+import { motivationalQuotes } from '../utils/quotes';
 
 interface SidebarButtonProps {
   icon: React.ReactNode;
@@ -24,6 +25,36 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ setCurrentPage, isMobileMenuOpen, setIsMobileMenuOpen, openSettingsModal, onLogout, openChat }) => {
+  const [dailyTip, setDailyTip] = useState('');
+
+  useEffect(() => {
+    const getDailyTip = () => {
+      const tipDataString = localStorage.getItem('dailyTipData');
+      const twentyFourHours = 24 * 60 * 60 * 1000;
+
+      if (tipDataString) {
+        try {
+          const { tip, timestamp } = JSON.parse(tipDataString);
+          const isExpired = (Date.now() - timestamp) > twentyFourHours;
+          if (!isExpired) {
+            setDailyTip(tip);
+            return;
+          }
+        } catch (error) {
+          console.error("Failed to parse daily tip data:", error);
+        }
+      }
+
+      // If no valid tip is found, generate a new one
+      const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+      const newTip = motivationalQuotes[randomIndex];
+      setDailyTip(newTip);
+      localStorage.setItem('dailyTipData', JSON.stringify({ tip: newTip, timestamp: Date.now() }));
+    };
+
+    getDailyTip();
+  }, []);
+
   return (
     <aside className={`w-full md:w-1/3 bg-custom-teal text-white flex flex-col p-4 space-y-4 transition-transform duration-300 ease-in-out
       ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -56,8 +87,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setCurrentPage, isMobileMenuOpen, set
 
       <div className="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 p-4 rounded-lg mt-4 shadow-md">
         <h3 className="font-bold mb-2">Dica do dia</h3>
-        <p className="text-sm">
-          Faça sempre mais do que o exigido. - Napoleon Hill
+        <p className="font-handwriting text-lg leading-relaxed text-gray-600 dark:text-gray-300">
+          {dailyTip}
         </p>
       </div>
     </aside>

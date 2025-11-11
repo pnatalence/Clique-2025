@@ -56,17 +56,26 @@ const CoursesPage: React.FC = () => {
   }, []);
 
   const renderTableBody = () => {
+    const minRows = 10;
+    const cellPadding = "px-6 py-5"; // Aumentado de py-4 para py-5
+
     if (loading) {
-        return (
-            <tr>
-                <td colSpan={7} className="text-center p-6 text-gray-500 dark:text-gray-400">Carregando cursos...</td>
+        return Array.from({ length: minRows }).map((_, index) => (
+            <tr key={`loading-skeleton-${index}`} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+                <td className={cellPadding}><div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-12"></div></td>
+                <td className={cellPadding}><div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse"></div></td>
+                <td className={cellPadding}><div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-24"></div></td>
+                <td className={cellPadding}><div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-32"></div></td>
+                <td className={cellPadding}><div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-32"></div></td>
+                <td className={cellPadding}><div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-20"></div></td>
+                <td className={cellPadding}><div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-32"></div></td>
             </tr>
-        );
+        ));
     }
 
     if (error) {
-        return (
-            <tr>
+        const rows = [(
+            <tr key="error-message">
                 <td colSpan={7} className="text-center p-6 text-red-500">
                     <div className="flex justify-center items-center space-x-2">
                        <WarningIcon />
@@ -74,38 +83,73 @@ const CoursesPage: React.FC = () => {
                     </div>
                 </td>
             </tr>
-        );
+        )];
+        for (let i = 0; i < minRows - 1; i++) {
+            rows.push(
+                <tr key={`empty-error-${i}`} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+                    <td colSpan={7} className={cellPadding}>&nbsp;</td>
+                </tr>
+            );
+        }
+        return rows;
     }
-
+    
     if (courses.length === 0) {
-         return (
-            <tr>
+        const rows = [(
+            <tr key="no-courses-message">
                 <td colSpan={7} className="text-center p-6 text-gray-500 dark:text-gray-400">Nenhum curso encontrado.</td>
             </tr>
-        );
+        )];
+        for (let i = 0; i < minRows - 1; i++) {
+            rows.push(
+                <tr key={`empty-no-courses-${i}`} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+                    <td colSpan={7} className={cellPadding}>&nbsp;</td>
+                </tr>
+            );
+        }
+        return rows;
     }
 
-    return courses.map((row) => (
+    const courseRows = courses.map((row) => (
         <tr key={row.code} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-            <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{row.code}</td>
-            <td className="px-6 py-4">{row.name}</td>
-            <td className="px-6 py-4">{row.abbr}</td>
-            <td className="px-6 py-4">{row.registrationFee}</td>
-            <td className="px-6 py-4">{row.monthlyFee}</td>
-            <td className="px-6 py-4">{`${row.durationDays} dias`}</td>
-            <td className="px-6 py-4">{row.totalCost}</td>
+            <td className={`${cellPadding} font-medium text-gray-900 dark:text-white`}>{row.code}</td>
+            <td className={cellPadding}>{row.name}</td>
+            <td className={cellPadding}>{row.abbr}</td>
+            <td className={cellPadding}>{row.registrationFee}</td>
+            <td className={cellPadding}>{row.monthlyFee}</td>
+            <td className={cellPadding}>{`${row.durationDays} dias`}</td>
+            <td className={cellPadding}>{row.totalCost}</td>
         </tr>
     ));
+    
+    const emptyRowsCount = minRows - courses.length;
+
+    if (emptyRowsCount > 0) {
+        const emptyRows = Array.from({ length: emptyRowsCount }).map((_, index) => (
+            <tr key={`empty-${index}`} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+                <td className={cellPadding}>&nbsp;</td>
+                <td className={cellPadding}>&nbsp;</td>
+                <td className={cellPadding}>&nbsp;</td>
+                <td className={cellPadding}>&nbsp;</td>
+                <td className={cellPadding}>&nbsp;</td>
+                <td className={cellPadding}>&nbsp;</td>
+                <td className={cellPadding}>&nbsp;</td>
+            </tr>
+        ));
+        return [...courseRows, ...emptyRows];
+    }
+
+    return courseRows;
   };
 
 
   return (
-    <div className="flex flex-col h-full">
-      <header className="flex justify-center items-center pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+    <div className="flex flex-col">
+      <header className="flex justify-center items-center pb-4 border-b-2 border-gray-200 dark:border-gray-700 flex-shrink-0">
         <h1 className="text-2xl font-bold text-gray-500 dark:text-gray-400 tracking-widest">CURSOS</h1>
       </header>
       
-      <div className="mt-6 p-8 bg-custom-teal rounded-2xl text-white flex justify-between items-center shadow-lg">
+      <div className="mt-6 p-8 bg-custom-teal rounded-2xl text-white flex justify-between items-center shadow-lg flex-shrink-0">
         <div>
           <h2 className="text-4xl font-bold">Gerencie seus cursos</h2>
           <p className="mt-2 text-lg opacity-90">Faça a gestão de seus cursos, adicione novos cursos ou edite as informações dos existentes.</p>
@@ -115,7 +159,7 @@ const CoursesPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-6 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
+      <div className="mt-6 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md flex-shrink-0">
         <h3 className="font-bold text-lg text-gray-800 dark:text-gray-200">Você tem tudo com um Clique</h3>
         <div className="flex flex-col lg:flex-row justify-between items-start mt-4 gap-4">
           <div className="space-y-3 text-gray-600 dark:text-gray-300 flex-shrink-0">
@@ -133,17 +177,17 @@ const CoursesPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md flex-1 overflow-auto">
+      <div className="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-x-auto">
         <table className="w-full text-sm text-left text-gray-600 dark:text-gray-300">
-          <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700 whitespace-nowrap">
+          <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700 whitespace-nowrap sticky top-0">
             <tr>
-              <th scope="col" className="px-6 py-3">Código</th>
-              <th scope="col" className="px-6 py-3">Nome do Curso</th>
-              <th scope="col" className="px-6 py-3">Nome Abreviado</th>
-              <th scope="col" className="px-6 py-3">Preço de Inscrição</th>
-              <th scope="col" className="px-6 py-3">Preço Parcelado (Mensalidade)</th>
-              <th scope="col" className="px-6 py-3">Tempo (Duração)</th>
-              <th scope="col" className="px-6 py-3">Preço Total</th>
+              <th scope="col" className="px-6 py-4">Código</th>
+              <th scope="col" className="px-6 py-4">Nome do Curso</th>
+              <th scope="col" className="px-6 py-4">Nome Abreviado</th>
+              <th scope="col" className="px-6 py-4">Preço de Inscrição</th>
+              <th scope="col" className="px-6 py-4">Preço Parcelado (Mensalidade)</th>
+              <th scope="col" className="px-6 py-4">Tempo (Duração)</th>
+              <th scope="col" className="px-6 py-4">Preço Total</th>
             </tr>
           </thead>
           <tbody>
